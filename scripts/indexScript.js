@@ -1,6 +1,6 @@
 console.log(window.location.hostname);
 
-fetch("http://localhost:3000/UNICEF/Datastructure").then(
+fetch("/UNICEF/Datastructure").then(
     res => {
         res.json().then(
             data => {
@@ -27,5 +27,5 @@ fetch("http://localhost:3000/UNICEF/Datastructure").then(
 function GetDfID_Table(buttonRef){
     var DfId = $(buttonRef).closest('tr').find('td:nth-child(1)').text();
     var DfAgency = $(buttonRef).closest('tr').find('td:nth-child(3)').text();
-    window.location.replace(`http://localhost:3000/UNICEF/Dataflow/${DfId}/${DfAgency}`);
+    window.location.replace(`/UNICEF/Dataflow/${DfId}/${DfAgency}`);
 }

@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/alexdm1998/backend_ptsi/issues"
   },
-  "homepage": "https://github.com/alexdm1998/backend_ptsi#readme"
+  "homepage": "https://github.com/alexdm1998/backend_ptsi#readme",
+  "engines": {
+    "node": "14.x"
+  }
 }

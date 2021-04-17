@@ -1,3 +1,5 @@
+console.log(window.location.hostname);
+
 fetch("http://localhost:3000/UNICEF/Datastructure").then(
     res => {
         res.json().then(

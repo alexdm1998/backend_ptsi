@@ -9,10 +9,6 @@ module.exports = app;
 
 require('./controller/routes.js')
 
-app.get("/", (req,res)=>{
-    res.send("This is the root page of the App")
-})
-
 app.listen(port, () => {
     console.log(`App is listening in ${host} on port ${port}` )
 })

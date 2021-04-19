@@ -1,5 +1,4 @@
-var NewUrl = window.location.href;
-var NewUrl = window.location.href + "/request";
+NewUrl = window.location.href + "/request";
 var Num_Dim;
 var datasets;
 fetch(NewUrl).then(
@@ -36,12 +35,9 @@ fetch(NewUrl).then(
                         temp += "</tr>";
                     });
                     document.getElementById('data').innerHTML += temp;
-
                     document.getElementById('total-observations').innerHTML = contador;
 
-                    console.log(datasets);
-
-                  
+                    console.log(datasets);  
                 }
             }
         )
@@ -50,39 +46,37 @@ fetch(NewUrl).then(
 
 
 
+//Reads multiple values of select
 function MonitorValue(){
-    var Dim_Values_Array = [];
+    var DimensionsObj={
+
+    }
     for(var i = 0; i < Num_Dim; i++){
-        var Dimension_PlaceHolder = $(`#Dimension_${i}`).val();
-        var BoolNull = false;
-        Dimension_PlaceHolder.forEach(value=>{
-            if(value == "null"){
-                BoolNull = true;
+        var Dimension_Values = $(`#Dimension_${i}`).val();
+        Dimension_Values.forEach(val=>{
+            if(val == "X"){
+                Dimension_Values = ["X"];
             }
         })
-        if(BoolNull){
-            var Dim_KeyPosition_Value = [i,"null"];
-        }else{
-            var Dim_KeyPosition_Value = [i , Dimension_PlaceHolder];
-        }
-        Dim_Values_Array.push(Dim_KeyPosition_Value);
+        console.log(Dimension_Values);
+        var Dimension_Index = `Dimension_${i}`;
+        DimensionsObj[Dimension_Index] = Dimension_Values;
     }
-
-    var Dim_Values_String = "";
-    for(var k = 1; k <= Dim_Values_Array.length; k++){
-        if(k < Dim_Values_Array.length){
-            Dim_Values_String += `${Dim_Values_Array[k-1][1][0]}:`; //[1] is temporary, single select
-        }else{
-            Dim_Values_String += `${Dim_Values_Array[k-1][1][0]}`;
-        }
-    }
-    console.log("String: " + Dim_Values_String);
-
-    FindValues(Dim_Values_String);
+    console.log(DimensionsObj);
 }
 
 
-function FindValues(stringSearch){
+
+
+
+function FindValues(Dim_Values_Array){
+    console.log(Dim_Values_Array);
+    
+}
+
+
+
+/* function FindValues(stringSearch){
     var stringSearchRegex = stringSearch.split(":");
     var FinalArray = [];
     for(var Obs in datasets){
@@ -153,4 +147,4 @@ function FindValues(stringSearch){
 
         
     }
-}
+} */

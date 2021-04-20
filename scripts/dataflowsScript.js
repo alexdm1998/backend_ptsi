@@ -41,9 +41,7 @@ fetch(`${window.location.href}/request`).then(
 )
 
 
-
-//Reads multiple values of select
-function MonitorValue(){
+function MonitorValue(){  //Reads multiple values of select
     var DimensionsObj={}
     for(var i = 0; i < Num_Dim; i++){
         var Dimension_Values = $(`#Dimension_${i}`).val();
@@ -109,7 +107,7 @@ function FindValues(Json_Filter_Dimensions){
 }
 
 
-function DisableOptions(FilterArray){
+function DisableOptions(FilterArray){ //Disables options in select
     for(var i = 0; i < Num_Dim; i++){
         var Select_Dimension = $(`#Dimension_${i}`);
 
@@ -123,4 +121,26 @@ function DisableOptions(FilterArray){
             }
         }
     }
+}
+
+
+function DownloadFiltered(){
+    console.log(window.location.href)
+    var AllValuesString = [];
+    for(var i = 0; i < Num_Dim; i++){
+        var Select_Dimension = $(`#Dimension_${i}`);
+        var ValuesArray = Select_Dimension.val();
+        var ValuesString = ValuesArray.join("+");
+        AllValuesString.push(ValuesString);
+    }
+    
+    /* fetch(`${window.location.href}/filter/A13..DZA.`).then(
+        res => {
+            res.json().then(
+                data => {
+                    console.log(data);
+                }
+            )
+        }
+    ) */
 }

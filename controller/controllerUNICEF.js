@@ -46,6 +46,26 @@ function getDataflow(req,res){
   });
 }
 
+
+function getDataflowFiltered(req,res){
+  var request = require('request');
+  var DataflowId = req.params.DfID;
+  var DataflowAgency = req.params.DfAgency;
+  var DataflowFilter = req.params.DfFilter;
+  var options = {
+    'method': 'GET',
+    'url': `https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/${DataflowAgency},${DataflowId},1.0/${DataflowFilter}?format=sdmx-json`,
+  };
+  request(options, function(error, response){
+    if (error) throw new Error(error);
+    var JsonObj = JSON.parse(response.body);
+    var JsonString  = JSON.stringify(JsonObj)
+    res.status(200).send(JsonString);
+  });
+
+}
+
+
 function getDataflowPage(req,res){
   res.sendFile(path.resolve('views/dataflows.html'));
 }
@@ -54,5 +74,6 @@ function getDataflowPage(req,res){
 module.exports = {
     getDataStructure: getDataStructure,
     getDataflow: getDataflow,
+    getDataflowFiltered: getDataflowFiltered,
     getDataflowPage: getDataflowPage
 };

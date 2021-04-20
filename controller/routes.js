@@ -10,6 +10,7 @@ app.get('/INEjson/', controllerINE.getJson);
 const controllerUNICEF = require('./controllerUNICEF');
 app.get('/UNICEF/Datastructure', controllerUNICEF.getDataStructure);
 app.get('/UNICEF/Dataflow/:DfID/:DfAgency/request', controllerUNICEF.getDataflow);
+app.get('/UNICEF/Dataflow/:DfID/:DfAgency/filter/:DfFilter', controllerUNICEF.getDataflowFiltered);
 app.get('/UNICEF/Dataflow/:DfID/:DfAgency', controllerUNICEF.getDataflowPage);
 
 

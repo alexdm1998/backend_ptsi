@@ -25,8 +25,9 @@ fetch(`${window.location.href}/request`).then(
                         if(dimension.values.length > 0){
                             var IndexValue = 0;
                             dimension.values.forEach(value =>{
-                                temp += `<option value=${IndexValue}>` + value.name + "</option>";
+                                temp += `<option custom_id=${dimension.values[IndexValue].id} value=${IndexValue}>` + value.name + "</option>";
                                 IndexValue += 1;
+                                
                             })
                         }
                         temp +=  "</select></td>";
@@ -125,22 +126,33 @@ function DisableOptions(FilterArray){ //Disables options in select
 
 
 function DownloadFiltered(){
-    console.log(window.location.href)
     var AllValuesString = [];
     for(var i = 0; i < Num_Dim; i++){
-        var Select_Dimension = $(`#Dimension_${i}`);
-        var ValuesArray = Select_Dimension.val();
-        var ValuesString = ValuesArray.join("+");
-        AllValuesString.push(ValuesString);
-    }
-    
-    /* fetch(`${window.location.href}/filter/A13..DZA.`).then(
-        res => {
-            res.json().then(
-                data => {
-                    console.log(data);
+        var Select = $('#Dimension_' + i);
+        var ValArray = Select.val();
+        var ExitArray = [];
+        if(ValArray.includes("X")){
+            ExitArray = [""];
+        }else{
+            for(var x = 0; x < Select[0].length; x++){
+                if(ValArray.includes(Select[0][x].value)){
+                    var CustomId = $(Select[0][x]).attr('custom_id');
+                    ExitArray.push(CustomId);
                 }
-            )
+            }
         }
-    ) */
+        ExitArray = ExitArray.join("+");
+        AllValuesString.push(ExitArray);
+    }
+    AllValuesString = AllValuesString.join(".");
+    var All = true;
+    for(var k = 0; k < AllValuesString.length; k++){
+        if(AllValuesString[k] !== "."){
+            All = false;
+            break;
+        }
+    }
+    if(All){
+        AllValuesString = "all";
+    }
 }

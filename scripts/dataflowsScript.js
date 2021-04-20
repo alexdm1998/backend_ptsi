@@ -1,7 +1,6 @@
-NewUrl = window.location.href + "/request";
 var Num_Dim;
 var datasets;
-fetch(NewUrl).then(
+fetch(`${window.location.href}/request`).then(
     res => {
         res.json().then(
             data => {
@@ -48,9 +47,7 @@ fetch(NewUrl).then(
 
 //Reads multiple values of select
 function MonitorValue(){
-    var DimensionsObj={
-
-    }
+    var DimensionsObj={}
     for(var i = 0; i < Num_Dim; i++){
         var Dimension_Values = $(`#Dimension_${i}`).val();
         Dimension_Values.forEach(val=>{
@@ -58,93 +55,79 @@ function MonitorValue(){
                 Dimension_Values = ["X"];
             }
         })
-        console.log(Dimension_Values);
         var Dimension_Index = `Dimension_${i}`;
         DimensionsObj[Dimension_Index] = Dimension_Values;
     }
     console.log(DimensionsObj);
+    FindValues(DimensionsObj);
 }
 
 
+//Finds Values with filter
+function FindValues(Json_Filter_Dimensions){
+    var NumDims = 0;
+    var VerifiedArray = {};
+    for(Dims in Json_Filter_Dimensions){NumDims += 1;} //Count dims
 
-
-
-function FindValues(Dim_Values_Array){
-    console.log(Dim_Values_Array);
-    
-}
-
-
-
-/* function FindValues(stringSearch){
-    var stringSearchRegex = stringSearch.split(":");
-    var FinalArray = [];
-    for(var Obs in datasets){
-        var ObsArrayValue = Obs.split(":");
-        var SameValue = true;
-        for(var i = 0; i < stringSearchRegex.length ; i++){
-            if(stringSearchRegex[i] == ObsArrayValue[i] || stringSearchRegex[i] == "X"){
-                //Do nothing
-            }else{
-                SameValue = false;
+    for(DimValArray in Json_Filter_Dimensions){ //Create Json Skeleton
+        var Pos = DimValArray.split("_")[1];
+        VerifiedArray[DimValArray] = {};
+        for(var i = 0; i < NumDims; i++){
+            if(i != Pos){
+                VerifiedArray[DimValArray][`Index_${i}`] = [];
             }
         }
-
-        if(SameValue){
-            FinalArray.push(Obs);
-        }
-
-       
     }
 
-
-    var KeyValues = [];
-    FinalArray.forEach(FilterObs=>{
-        var FilterObsSplit = FilterObs.split(":");
-        for(var l = 0; l < FilterObsSplit.length; l++){
-            if(KeyValues[l] == undefined){
-                KeyValues[l] = [FilterObsSplit[l]];
-            }
-            else{
-                var BoolExist = false;
-                KeyValues[l].forEach(KeyNum=>{
-                    if(FilterObsSplit[l] == KeyNum){
-                        BoolExist = true;
+    for(ArrayVal in Json_Filter_Dimensions){ //Get filter for each dimension
+        var DimPos = ArrayVal.split("_")[1];
+        for(Obs in datasets){
+            var Array_Obs = Obs.split(":");
+            if(Json_Filter_Dimensions[`Dimension_${DimPos}`].some(Val => Val == Array_Obs[DimPos] || Val == "X")){
+                for(var w = 0; w < NumDims; w++){
+                    if(w != DimPos && !(VerifiedArray[`Dimension_${DimPos}`][`Index_${w}`].includes(Array_Obs[w]))){
+                        VerifiedArray[`Dimension_${DimPos}`][`Index_${w}`].push(Array_Obs[w]);
                     }
-                })
-                if(BoolExist == false){
-                    KeyValues[l].push(FilterObsSplit[l]);
                 }
             }
         }
-    })
-    console.log(KeyValues);
-
-
-
-
-    for(var c = 0; c < KeyValues.length; c++){
-        var OptionKeyPos = $(`#Dimension_${c}`);
-        console.log(OptionKeyPos[0].length);
-        var LengthOptions = OptionKeyPos[0].length;
-        for(var z = 0; z < LengthOptions; z++){
-            var BoolOption = false;
-            KeyValues[c].forEach(Num=>{
-                if(Num == OptionKeyPos[0][z].value || OptionKeyPos[0][z].value=="X"){
-                    BoolOption = true;
-                }
-            })
-
-            if(BoolOption){
-                OptionKeyPos[0][z].disabled = false;
-                OptionKeyPos[0][z].hidden = false;
-            }else{
-                OptionKeyPos[0][z].disabled = true;
-                OptionKeyPos[0][z].hidden = true;
-            }
-        }
-    
-
-        
     }
-} */
+    console.log(VerifiedArray);
+
+
+    var FinalArray = {};
+    for(var j = 0; j < Num_Dim; j++){
+        var FilteredArray = [];
+        for(var k = 0; k < Num_Dim; k++){
+            if(k != j){
+                if(FilteredArray.length == 0){
+                    FilteredArray = VerifiedArray[`Dimension_${k}`][`Index_${j}`];
+                }else{
+                    FilteredArray = FilteredArray.filter(value => VerifiedArray[`Dimension_${k}`][`Index_${j}`].includes(value));
+                }
+            }
+        }
+        FinalArray[`Dimension_${j}`] = FilteredArray;
+    }
+
+    DisableOptions(FinalArray);
+}
+
+
+function DisableOptions(FilterArray){
+
+    console.log(FilterArray);
+    for(var i = 0; i < Num_Dim; i++){
+        var Select_Dimension = $(`#Dimension_${i}`);
+
+        for(var k = 0; k < Select_Dimension[0].length; k++){
+            if(FilterArray[`Dimension_${i}`].includes(Select_Dimension[0][k].value) || Select_Dimension[0][k].value == "X"){
+                Select_Dimension[0][k].disabled = false;
+                Select_Dimension[0][k].hidden = false;
+            }else{
+                Select_Dimension[0][k].disabled = true;
+                Select_Dimension[0][k].hidden = true;
+            }
+        }
+    }
+}

@@ -12,7 +12,6 @@ fetch(`${window.location.href}/request`).then(
                 for(var observation in datasets){
                     contador += 1;
                 }
-                console.log(contador);
                 if (dimensions.length > 0) {
 
                     var temp = "";
@@ -35,8 +34,6 @@ fetch(`${window.location.href}/request`).then(
                     });
                     document.getElementById('data').innerHTML += temp;
                     document.getElementById('total-observations').innerHTML = contador;
-
-                    console.log(datasets);  
                 }
             }
         )
@@ -58,7 +55,6 @@ function MonitorValue(){
         var Dimension_Index = `Dimension_${i}`;
         DimensionsObj[Dimension_Index] = Dimension_Values;
     }
-    console.log(DimensionsObj);
     FindValues(DimensionsObj);
 }
 
@@ -92,11 +88,10 @@ function FindValues(Json_Filter_Dimensions){
             }
         }
     }
-    console.log(VerifiedArray);
 
 
     var FinalArray = {};
-    for(var j = 0; j < Num_Dim; j++){
+    for(var j = 0; j < Num_Dim; j++){ //Get the intersection of all arrays
         var FilteredArray = [];
         for(var k = 0; k < Num_Dim; k++){
             if(k != j){
@@ -115,8 +110,6 @@ function FindValues(Json_Filter_Dimensions){
 
 
 function DisableOptions(FilterArray){
-
-    console.log(FilterArray);
     for(var i = 0; i < Num_Dim; i++){
         var Select_Dimension = $(`#Dimension_${i}`);
 

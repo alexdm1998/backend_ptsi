@@ -22,7 +22,6 @@ function getDataStructure(req, res){
       }
       
       var myJsonString = JSON.stringify(ArrayDfID);
-      
       res.status(200).json(myJsonString);
 
       res.end();

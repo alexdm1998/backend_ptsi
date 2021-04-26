@@ -128,6 +128,30 @@ function getDataflowFilteredV2(req,res){
 
 }
 
+function getCustomDataflow(req,res){
+  var request = require('request');
+  var DataflowAgency = req.params.DfAgency;
+  var DataflowId = req.params.DfID;
+  var options = {
+    'method' : "GET",
+    'url' : `https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/${DataflowAgency},${DataflowId},1.0/all?format=sdmx-json`,
+  }
+  request(options, function(error, response){
+    if(error) throw new Error(error);
+    var JsonObj = JSON.parse(response.body);
+    JsonObj = JsonObj.data;
+    var Datasets = JsonObj.dataSets[0].series;
+    var Dimensions = JsonObj.structure.dimensions.series;
+    var DimensionTime = JsonObj.structure.dimensions.observation;
+    var Dataflow = {
+      "Datasets" : Datasets,
+      "Dimensions" : Dimensions,
+      "DimensionTime" : DimensionTime
+    }
+    res.json(Dataflow);
+  });
+}
+
 
 
 
@@ -146,5 +170,6 @@ module.exports = {
     getDataflowV2: getDataflowV2,
     getDataflowFiltered: getDataflowFiltered,
     getDataflowFilteredV2: getDataflowFilteredV2,
-    getDataflowPage: getDataflowPage
+    getDataflowPage: getDataflowPage,
+    getCustomDataflow: getCustomDataflow
 };

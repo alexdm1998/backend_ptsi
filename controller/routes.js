@@ -19,6 +19,8 @@ app.get('/UNICEF/v2/Dataflow/:DfID/:DfAgency/request', controllerUNICEF.getDataf
 app.get('/UNICEF/v2/Dataflow/:DfID/:DfAgency/filter/:DfFilter', controllerUNICEF.getDataflowFilteredV2); //Retorna dataflow com filtro
 app.get('/UNICEF/Dataflow/:DfID/:DfAgency', controllerUNICEF.getDataflowPage); //Retorna um pag Html
 
+app.get('/UNICEF/Df/:DfID/:DfAgency',controllerUNICEF.getCustomDataflow);
+
 
 app.get('/', function (req, res) {
     res.sendFile(path.resolve('views/index.html'));

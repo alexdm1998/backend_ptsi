@@ -124,6 +124,7 @@ function getDataflowFilteredV2(req,res){
     if (error) throw new Error(error);
     var JsonObj = JSON.parse(response.body);
     res.status(200).json(JsonObj);
+    res.end();
   });
 
 }
@@ -148,7 +149,8 @@ function getCustomDataflow(req,res){
       "Dimensions" : Dimensions,
       "DimensionTime" : DimensionTime
     }
-    res.json(Dataflow);
+    res.status(200).json(Dataflow);
+    res.end();
   });
 }
 

@@ -1,5 +1,5 @@
 var path = require('path');
-
+var papa = require('papaparse');
 
 function getDataStructure(req, res){
     var request = require('request');
@@ -129,6 +129,26 @@ function getDataflowFilteredV2(req,res){
 
 }
 
+
+function getDataflowFilteredV2csv(req,res){
+  var request = require('request');
+  var DataflowId = req.params.DfID;
+  var DataflowAgency = req.params.DfAgency;
+  var DataflowFilter = req.params.DfFilter;
+  var options = {
+    'method': 'GET',
+    'url': `https://sdmx.data.unicef.org/ws/public/sdmxapi/rest/data/${DataflowAgency},${DataflowId},1.0/${DataflowFilter}?format=csv`,
+  };
+  request(options, function(error, response){
+    if (error) throw new Error(error);
+    let Csv = response.body;
+    let JsonObj = papa.parse(Csv,{header: true, delimiter: ",", skipEmptyLines:true})
+    res.status(200).send(JsonObj);
+    res.end();
+  });
+
+}
+
 function getCustomDataflow(req,res){
   var request = require('request');
   var DataflowAgency = req.params.DfAgency;
@@ -172,6 +192,7 @@ module.exports = {
     getDataflowV2: getDataflowV2,
     getDataflowFiltered: getDataflowFiltered,
     getDataflowFilteredV2: getDataflowFilteredV2,
+    getDataflowFilteredV2csv: getDataflowFilteredV2csv,
     getDataflowPage: getDataflowPage,
     getCustomDataflow: getCustomDataflow
 };

@@ -2,8 +2,6 @@ var path = require('path');
 var papa = require('papaparse');
 
 
-
-
 function getDataStructureV2(req, res){
   var request = require('request');
   var options = {
@@ -98,16 +96,9 @@ function getCustomDataflow(req,res){
 
 
 
-
-function getDataflowPage(req,res){
-  res.sendFile(path.resolve('views/dataflows.html'));
-}
-
-
 module.exports = {
     getDataStructureV2: getDataStructureV2,
     getDataflowV2: getDataflowV2,
     getDataflowFilteredV2csv: getDataflowFilteredV2csv,
-    getDataflowPage: getDataflowPage,
     getCustomDataflow: getCustomDataflow
 };
